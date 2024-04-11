@@ -5,13 +5,30 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+const port = 3000;
 
-const io = require("socket.io")(8080, {
+const server = app.listen(
+  port,
+  console.log(`Server running on PORT ${port}...`)
+);
+
+// const io = require("socket.io")(8080, {
+//   cors: {
+//     origin: [
+//       "http://localhost:5173",
+//       "https://chatapp-frontend-t6ld.onrender.com/",
+//     ],
+//   },
+// });
+
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
   cors: {
     origin: [
       "http://localhost:5173",
       "https://chatapp-frontend-t6ld.onrender.com/",
     ],
+    // credentials: true,
   },
 });
 
@@ -36,10 +53,4 @@ io.on("connection", (socket) => {
       message: message,
     });
   });
-});
-
-const port = 3000;
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
 });
