@@ -1,17 +1,42 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
+const dotenv = require("dotenv");
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-const port = 3000;
-const io = require("socket.io")(8080 || port, {
+dotenv.config();
+
+/* deployment*/
+
+const __dirname1 = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running..");
+  });
+}
+
+const PORT = process.env.PORT;
+
+const server = app.listen(
+  PORT,
+  console.log(`Server running on PORT ${PORT}...`)
+);
+
+const io = require("socket.io")(server, {
+  pingTimeout: 60000,
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://chatapp-frontend-t6ld.onrender.com/",
-    ],
+    origin: "http://localhost:5173",
+    // credentials: true,
   },
 });
 
@@ -36,8 +61,4 @@ io.on("connection", (socket) => {
       message: message,
     });
   });
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
 });
