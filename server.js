@@ -11,19 +11,12 @@ dotenv.config();
 
 /* deployment*/
 
-// const __dirname1 = path.resolve();
+app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "..", "frontend", "dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"));
+});
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.join(__dirname, "..", "frontend", "dist", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running..");
-  });
-}
 const PORT = process.env.PORT;
 
 const server = app.listen(
@@ -31,8 +24,8 @@ const server = app.listen(
   console.log(`Server running on PORT ${PORT}...`)
 );
 
-app.get("/", (req, res) => {
-  res.send("sucessfull");
+app.get("/api/data", (req, res) => {
+  res.json({ message: "API Route" });
 });
 
 const io = require("socket.io")(server, {
