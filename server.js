@@ -32,6 +32,10 @@ const server = app.listen(
   console.log(`Server running on PORT ${PORT}...`)
 );
 
+app.get("/", (req, res) => {
+  res.send("sucessfull");
+});
+
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
