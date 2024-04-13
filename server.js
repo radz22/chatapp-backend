@@ -40,8 +40,7 @@ const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
     origin: "https://chatapp-frontend-t6ld.onrender.com/",
-
-    // credentials: true,
+    credentials: true,
   },
 });
 
