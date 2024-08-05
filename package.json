@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc --build",
+    "start": "node ./dist/index.js",
+    "start:dev": "nodemon ./src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/node": "^22.1.0",
+    "cors": "^2.8.5",
+    "create-server": "^1.0.2",
+    "express": "^4.19.2",
+    "gitignore": "^0.7.0",
+    "http": "^0.0.1-security",
+    "nodemon": "^3.1.4",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/socket.io": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
