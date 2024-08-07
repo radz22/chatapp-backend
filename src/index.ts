@@ -16,25 +16,28 @@ const io = new SocketIOServer(server, {
   },
 });
 
+let users: any = [];
+
 io.on("connection", (socket) => {
   socket.on("join", (data) => {
     const { name, room, time } = data;
     socket.join(room);
+    users.push({ name, room });
+
+    const result = users.filter((user: any) => user.room === room);
     socket.broadcast.to(room).emit("join", {
       user: name,
       currentTime: time,
     });
-    // io.emit("user", name);
-    io.in(room).emit("user", name);
+    io.to(room).emit("user", result);
   });
 
   socket.on("sender", (data) => {
     const { name, room, message } = data;
     socket.join(room);
-    // socket.to(room).emit("notify", {
-    //   notify: (x += 1),
-    // });
-
+    socket.to(room).emit("notification", {
+      name: name,
+    });
     io.to(room).emit("receiver", {
       user: name,
       message: message,
